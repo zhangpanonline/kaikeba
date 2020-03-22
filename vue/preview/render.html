@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    <heading :level="1" title="h1" >title</heading>
+  </div>
+</body>
+</html>
+<script>
+  Vue.component('heading', {
+      props: {
+        level: {
+          type: Number, 
+          required: true
+        },
+        title: {
+          type: String,
+          default: ''
+        }
+      },
+    render(h) {
+      const vode = h(
+        `h${this.level}`,
+        {
+          attrs: {
+            title: this.title
+          }
+        },
+        this.$slots.default
+      )
+      console.log(vode)
+      return vode
+    }
+  })
+  new Vue({
+    el: '#app',
+  })
+</script>

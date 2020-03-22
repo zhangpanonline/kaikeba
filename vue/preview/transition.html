@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./vue.js"></script>
+</head>
+<body>
+  <style>
+    .backColor {
+      background: lightblue;
+    }
+    .fade-enter {
+      opacity: 0;
+    }
+    .fade-enter-active {
+      /* transition: opactiy 3s; */
+      transition: ease-in-out(cubic-bezier(0.175, 0.885, 0.32, 1.275)) 2s;
+    }
+    .fade-enter-to {
+      opacity: 1;
+    }
+  </style>
+  <div id="app">
+    <button @click="showMsg" >show</button>
+    <message :show.sync="show" ></message>
+  </div>
+</body>
+</html>
+<script>
+  Vue.component('message', {
+    props: {
+      show: {
+        type: Boolean,
+        default: false
+      },
+    },
+    template: `
+      <transition name="fade">
+        <div class="backColor" v-if="show" >
+          <h1>这是消息提示</h1>
+          <button @click="$emit('update:show', false)">close</button>
+        </div>
+      </transition>
+    `
+  })
+  new Vue({
+    el: '#app',
+    data() {
+      return {
+        show: false
+      }
+    },
+    methods: {
+      showMsg() {
+        this.show = true
+      }
+    },
+  })
+</script>

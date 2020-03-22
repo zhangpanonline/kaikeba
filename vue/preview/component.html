@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    <course-add v-model="course" @add-course="addCourse"></course-add>
+    <!-- <course-add :val="course" @change="course=$event" @add-course="addCourse"></course-add> -->
+    <course-list ref="ref" :courses="courses"></course-list>
+  </div>
+</body>
+</html>
+<script>
+  Vue.prototype.$bus = new Vue()
+  Vue.component('course-list', {
+    props: {
+      courses: {
+        type: Array,
+        default: () => []
+      }
+    },
+    data() {
+      return {
+        name: []
+      }
+    },
+    created () {
+      setTimeout(() => {
+        this.name = [{a: 'name'}]
+      }, 2000);
+    },
+    template: `
+    <div>
+      <div>{{name[0] && name[0].a}}</div>
+      <!-- 条件渲染 -->
+      <p v-if="courses.length == 0">没有任何课程信息</p>
+      <!-- 列表渲染 -->
+      <ul>
+        <li v-for="c in courses" :key="c.name">{{c.name}}-{{c.price}}元</li>
+      </ul>
+    </div>
+    `
+  })
+  Vue.component('course-add', {
+    props: ['value'],
+    model: {
+      value: 'value',
+      event: 'input'
+    },
+    template: `
+      <div>
+        <input :value="value" @input="$emit('input', $event.target.value)" @keydown.enter="addCourse" />
+        <button @click="addCourse">add course</button>
+      </div>
+    `,
+    methods: {
+      addCourse() {
+        this.$emit('add-course')
+      }
+    },
+  })
+  new Vue({
+    el: '#app',
+    data() {
+      return {
+        courses: [],
+        course: ''
+      }
+    },
+    created () {
+      setTimeout(() => {
+        this.courses = [
+          { name: '课程1', price: 0 },
+          { name: '课程2', price: 0 }
+        ]
+      }, 1000);
+    },
+    methods: {
+      addCourse() {
+        // this.courses.push(this.course)
+        // this.course = ''
+        // this.courses.forEach(v => Vue.set(v, 'price', this.course))
+        // this.$delete(this.courses[0], 'name')
+        this.$refs.ref.name[0].a = 'zhang'
+      },
+    },
+  })
+</script>
