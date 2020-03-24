@@ -169,6 +169,10 @@ watch: {
 ### 15 动态添加路由 ###
 `this.$router.addRoutes(routes)`
 
+### 16 `VUEX` ###
+* namespace: true // 命名空间
+* Getters // vuex中的计算属性
+
 <hr>
 
 ## 一、 `vue`组件化实践 ##
