@@ -5,29 +5,56 @@ class KVueRouter {
   constructor (options) {
     this.$options = options
     // 设置一个响应式的current属性
-    this._vm = new Vue({
-      data: {
-        $$current: '/'
-      }
-    })
+    // this._vm = new Vue({
+    //   data: {
+    //     $$current: '/'
+    //   }
+    // })
     // Vue.util.defineReactive(this, 'current', '/')
+    this.current = window.location.hash.slice(1) || '/'
+    Vue.util.defineReactive(this, 'matched', [])
+    // match 可以递归遍历路由表,获得匹配关系数组
+    this.match()
 
     // 事件监听hashchange
     window.addEventListener('hashchange', this.onHashChange.bind(this))
     window.addEventListener('load', this.onHashChange.bind(this))
 
-    this.routeMap = {}
-    this.$options.routes.forEach(route => {
-      this.routeMap[route.path] = route
-    })
+    // this.routeMap = {}
+    // this.$options.routes.forEach(route => {
+    //   this.routeMap[route.path] = route
+    // })
+
+
   }
 
-  get current() {
-    return this._vm._data.$$current
-  }
+  // get current() {
+  //   return this._vm._data.$$current
+  // }
 
   onHashChange() {
-    this._vm._data.$$current = window.location.hash.slice(1)
+    this.current = window.location.hash.slice(1)
+    this.matched = []
+    this.match()
+    // this._vm._data.$$current = window.location.hash.slice(1)
+  }
+
+  match(routes) {
+    routes = routes || this.$options.routes
+    // 递归遍历
+    for (const route of routes) {
+      if (route.path === '/' && this.current === '/') {
+        this.matched.push(route)
+        return  
+      }
+      if (route.path !== '/' && this.current.indexOf(route.path) != -1) {
+        this.matched.push(route)
+        if (route.children) {
+          this.match(route.children)
+        }
+        return
+      }
+    }
   }
 
   static install(_Vue) {

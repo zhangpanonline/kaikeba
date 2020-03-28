@@ -2,22 +2,16 @@ var Vue;
 
 class Store {
   constructor(options) {
-    this._vm = new Vue({
-      data: {
-        $$state: options.state
-      },
-      computed: {
-        a() {
-          return 1
-        }
-      }
-    })
-    this._getters = options._getters
-
+    this._getters = options.getters
+    
     this._mutations = options.mutations
-
+    
     this._actions = options.actions
 
+    const computed = {}
+    this.getters = {}
+
+    
     // 绑定commit、dispatch方法中的this到Store
     const store = this
     const { commit, dispatch } = this
@@ -27,6 +21,20 @@ class Store {
     this.dispatch = function boundDispatch(type, payload) {
       dispatch.call(store, type, payload)
     }
+                      Object.keys(this._getters).forEach(key => {
+                        computed[key] = function() {
+                          return store._getters[key](store.state)
+                        }
+                        Object.defineProperty(store.getters, key, {
+                          get: () => store._vm[key]
+                        })
+                      })
+                      this._vm = new Vue({
+                        data: {
+                          $$state: options.state
+                        },
+                        computed
+                      })
   }
   get state() {
     return this._vm._data.$$state
