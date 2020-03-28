@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app"></div>
+</body>
+</html>
+<script>
+  const app = document.getElementById('app')
+
+  const obj = {}
+  function update() {
+    app.innerHTML = obj.date
+  }
+  defineReactive(obj, 'date', '')
+
+  setInterval(() => {
+    obj.date = new Date().getTime()
+  }, 10000);
+
+function defineReactive(obj, key, val) {
+
+  Object.defineProperty(obj, key, {
+    get() {
+      console.log('get', key, val)
+      return val
+    },
+    set (newVal,x) {
+      if (newVal !== val) {
+        console.log('set', key, newVal)
+        val = newVal
+        update()
+      }
+    }
+  })
+
+}
+</script>

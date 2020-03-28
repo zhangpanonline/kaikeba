@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+ <div id="app">
+    <p>{{counter}}</p>
+    <p k-text="counter" ></p>
+    <p k-html="desc" ></p>
+    <button @click="onClick" >click me</button>
+ </div> 
+</body>
+</html>
+<script src="./02_kvue.js"></script>
+<script>
+  const app = new KVue({
+    el: '#app',
+    data: {
+      counter: 1,
+      desc: '<h1>html</h1>'
+    },
+    methods: {
+      onClick() {
+        alert(1)
+      }
+    }
+  })
+  setInterval(() => {
+    app.counter++
+  }, 1000)
+</script>
