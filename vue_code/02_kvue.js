@@ -170,6 +170,22 @@ class Compile {
       that.$vm[fn]()
     }
   }
+
+  // k-model="xx"
+  model(node, exp) {
+    // update方法只完成赋值和更新
+    this.update(node, exp, 'model')
+    // 事件监听
+    node.addEventListener('input', e => {
+      // 将新的值赋值给数据
+      this.$vm[exp] = e.target.value
+    })
+  }
+
+  modelUpdater(node, value) {
+    // 表单元素赋值
+    node.value = value
+  }
 }
 
 // Dep： 管理watcher
