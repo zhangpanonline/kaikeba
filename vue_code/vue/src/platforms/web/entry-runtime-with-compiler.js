@@ -15,10 +15,12 @@ const idToTemplate = cached(id => {
 })
 
 const mount = Vue.prototype.$mount
+// 扩展$mount
 Vue.prototype.$mount = function (
   el?: string | Element,
   hydrating?: boolean
 ): Component {
+  // 宿主元素
   el = el && query(el)
 
   /* istanbul ignore if */
@@ -31,7 +33,10 @@ Vue.prototype.$mount = function (
 
   const options = this.$options
   // resolve template/el and convert to render function
+
+  // render函数不存在情况下
   if (!options.render) {
+    // 首先查找template
     let template = options.template
     if (template) {
       if (typeof template === 'string') {
@@ -56,6 +61,7 @@ Vue.prototype.$mount = function (
     } else if (el) {
       template = getOuterHTML(el)
     }
+    // 获取到template后，最终目标将其转换为render函数
     if (template) {
       /* istanbul ignore if */
       if (process.env.NODE_ENV !== 'production' && config.performance && mark) {

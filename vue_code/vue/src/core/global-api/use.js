@@ -10,6 +10,7 @@ export function initUse (Vue: GlobalAPI) {
     }
 
     // additional parameters
+    // TODO arguments:是包括插件定义和它的所有参数，这里不要插件定义，换成Vue构造函数
     const args = toArray(arguments, 1)
     args.unshift(this)
     if (typeof plugin.install === 'function') {

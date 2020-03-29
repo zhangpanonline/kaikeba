@@ -107,11 +107,13 @@ function copyAugment (target: Object, src: Object, keys: Array<string>) {
  * returns the new observer if successfully observed,
  * or the existing observer if the value already has one.
  */
+// 返回一个ob实例
 export function observe (value: any, asRootData: ?boolean): Observer | void {
   if (!isObject(value) || value instanceof VNode) {
     return
   }
   let ob: Observer | void
+  // 如果value已经是响应式数据，则直接返回
   if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
     ob = value.__ob__
   } else if (
@@ -121,6 +123,7 @@ export function observe (value: any, asRootData: ?boolean): Observer | void {
     Object.isExtensible(value) &&
     !value._isVue
   ) {
+    // 如果不是，则创建一个新实力
     ob = new Observer(value)
   }
   if (asRootData && ob) {
@@ -153,16 +156,23 @@ export function defineReactive (
     val = obj[key]
   }
 
-  let childOb = !shallow && observe(val)
+  // 数据拦截定义
+  let childOb = !shallow && observe(val) // 递归
   Object.defineProperty(obj, key, {
     enumerable: true,
     configurable: true,
     get: function reactiveGetter () {
+      // 获取value
       const value = getter ? getter.call(obj) : val
-      if (Dep.target) {
+      // 依赖收集
+      if (Dep.target) { // Watcher 实例
+        // 创建dep和watcher之间的多对多关系映射
         dep.depend()
+        // 如果当前value是对象
         if (childOb) {
+          // 子ob中的dep和watcher创建关系
           childOb.dep.depend()
+          // 如果是数组还要遍历里面每个元素
           if (Array.isArray(value)) {
             dependArray(value)
           }
@@ -187,6 +197,7 @@ export function defineReactive (
       } else {
         val = newVal
       }
+      // 如果新对象还是对象，需要额外响应化处理
       childOb = !shallow && observe(newVal)
       dep.notify()
     }
