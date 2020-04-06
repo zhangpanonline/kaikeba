@@ -56,6 +56,8 @@ export function initLifecycle (vm: Component) {
 }
 
 export function lifecycleMixin (Vue: Class<Component>) {
+
+  // TODO：_update() 第一次在哪调用？
   // 更新函数是补丁方法的调用者
   Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
     const vm: Component = this
@@ -65,11 +67,12 @@ export function lifecycleMixin (Vue: Class<Component>) {
     vm._vnode = vnode
     // Vue.prototype.__patch__ is injected in entry points
     // based on the rendering backend used.
+    // 虚拟dom和真是dom进行diff比较的入口点
     if (!prevVnode) {
-      // initial render
+      // initial render 初始化渲染
       vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */)
     } else {
-      // updates
+      // updates 更新阶段：diff 发生的地方
       vm.$el = vm.__patch__(prevVnode, vnode)
     }
     restoreActiveInstance()
@@ -95,7 +98,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
       vm._watcher.update()
     }
   }
-
+  // 使用 $destroy 后，还需要删除 dom
   Vue.prototype.$destroy = function () {
     const vm: Component = this
     if (vm._isBeingDestroyed) {
@@ -345,7 +348,7 @@ export function callHook (vm: Component, hook: string) {
       invokeWithErrorHandling(handlers[i], vm, null, vm, info)
     }
   }
-  if (vm._hasHookEvent) {
+  if (vm._hasHookEvent) { // 如果标记钩子事件，则额外派发一个自定义事件出去
     vm.$emit('hook:' + hook)
   }
   popTarget()

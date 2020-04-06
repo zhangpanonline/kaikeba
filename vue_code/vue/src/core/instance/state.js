@@ -116,6 +116,7 @@ function initData (vm: Component) {
   data = vm._data = typeof data === 'function'
     ? getData(data, vm)
     : data || {}
+    // 判断是不是一个对象
   if (!isPlainObject(data)) {
     data = {}
     process.env.NODE_ENV !== 'production' && warn(
@@ -132,6 +133,7 @@ function initData (vm: Component) {
   while (i--) {
     const key = keys[i]
     if (process.env.NODE_ENV !== 'production') {
+      // 判断 methos 里的 key 是否有和 data 里定义的 key 重名
       if (methods && hasOwn(methods, key)) {
         warn(
           `Method "${key}" has already been defined as a data property.`,
@@ -139,14 +141,17 @@ function initData (vm: Component) {
         )
       }
     }
+    // 判断 props 里的 key 是否有和 data 里定义的 key 重名
     if (props && hasOwn(props, key)) {
       process.env.NODE_ENV !== 'production' && warn(
         `The data property "${key}" is already declared as a prop. ` +
         `Use prop default value instead.`,
         vm
       )
+      // 判断属性名是否不以 $ 或 _ 开头
     } else if (!isReserved(key)) {
       // 将data中的属性代理到vm上
+      // TODO 代理的get方法从哪里取的值？
       proxy(vm, `_data`, key)
     }
   }

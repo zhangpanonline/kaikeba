@@ -44,6 +44,7 @@ export class Observer {
     this.dep = new Dep()
     this.vmCount = 0
     def(value, '__ob__', this)
+    // 判断 value 是对象还是数组
     if (Array.isArray(value)) {
       if (hasProto) {
         protoAugment(value, arrayMethods)
@@ -52,6 +53,7 @@ export class Observer {
       }
       this.observeArray(value)
     } else {
+      // 对象遍历响应化
       this.walk(value)
     }
   }
@@ -109,6 +111,7 @@ function copyAugment (target: Object, src: Object, keys: Array<string>) {
  */
 // 返回一个ob实例
 export function observe (value: any, asRootData: ?boolean): Observer | void {
+  // TODO 什么情况下 value 不是 object，什么情况下 value 会是 VNode ?
   if (!isObject(value) || value instanceof VNode) {
     return
   }
@@ -123,7 +126,7 @@ export function observe (value: any, asRootData: ?boolean): Observer | void {
     Object.isExtensible(value) &&
     !value._isVue
   ) {
-    // 如果不是，则创建一个新实力
+    // 如果不是，则创建一个新实例
     ob = new Observer(value)
   }
   if (asRootData && ob) {
@@ -142,6 +145,7 @@ export function defineReactive (
   customSetter?: ?Function,
   shallow?: boolean
 ) {
+  // 每个 key 对应一个 Dep
   const dep = new Dep()
 
   const property = Object.getOwnPropertyDescriptor(obj, key)
@@ -199,6 +203,7 @@ export function defineReactive (
       }
       // 如果新对象还是对象，需要额外响应化处理
       childOb = !shallow && observe(newVal)
+      // 通知，开始更新
       dep.notify()
     }
   })

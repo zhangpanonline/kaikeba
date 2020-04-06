@@ -1,0 +1,35 @@
+<script src="./node_modules/snabbdom/dist/snabbdom.js" ></script>
+<script src="./node_modules/snabbdom/dist/snabbdom-style.js" ></script>
+<script>
+  const app = document.createElement('div')
+  app.setAttribute('id', 'app')
+  document.documentElement.appendChild(app)
+  const { init, h } = snabbdom
+  const patch = init([snabbdom_style.default])
+  function defineReactive(obj, key, val) {
+    Object.defineProperty(obj, key, {
+      get() {
+        return val
+      },
+      set(newVal) {
+        val = newVal
+        update()
+      }
+    })
+  }
+
+  function update() {
+    vnode = patch(vnode, h('div#app', { style: { color: `hsl( ${obj.foo}, 100%, 50%)`, fontSize: '100px' } }, obj.foo))
+  }
+  
+  const obj = {}
+  defineReactive(obj, 'foo', 1)
+
+
+  let vnode = patch(app, h('div#app', obj.foo))
+
+  setInterval(() => {
+    obj.foo = ++obj.foo%360
+  }, 100);
+
+</script>

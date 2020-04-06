@@ -34,7 +34,9 @@ import {
 
 // inline hooks to be invoked on component VNodes during patch
 const componentVNodeHooks = {
+  // 初始化：实例化，挂载。new Vue()之后，其它的组件没有看到实例化，原因就在这里，这里默认$mount
   init (vnode: VNodeWithData, hydrating: boolean): ?boolean {
+    // 首先判断实例是否已经存在，如果是 keep-alive 实例还没有销毁
     if (
       vnode.componentInstance &&
       !vnode.componentInstance._isDestroyed &&
@@ -44,14 +46,17 @@ const componentVNodeHooks = {
       const mountedNode: any = vnode // work around flow
       componentVNodeHooks.prepatch(mountedNode, mountedNode)
     } else {
+      // 创建组件实例并挂载
       const child = vnode.componentInstance = createComponentInstanceForVnode(
         vnode,
         activeInstance
       )
+      // 挂载
       child.$mount(hydrating ? vnode.elm : undefined, hydrating)
     }
   },
 
+  // patch 两个节点之前要做的事
   prepatch (oldVnode: MountedComponentVNode, vnode: MountedComponentVNode) {
     const options = vnode.componentOptions
     const child = vnode.componentInstance = oldVnode.componentInstance
@@ -152,6 +157,7 @@ export function createComponent (
 
   // transform component v-model data into props & events
   if (isDef(data.model)) {
+    // v-model 选项的处理
     transformModel(Ctor.options, data)
   }
 
@@ -183,6 +189,7 @@ export function createComponent (
   }
 
   // install component management hooks onto the placeholder node
+  // 安装组件的钩子函数
   installComponentHooks(data)
 
   // return a placeholder vnode
@@ -220,11 +227,14 @@ export function createComponentInstanceForVnode (
     options.render = inlineTemplate.render
     options.staticRenderFns = inlineTemplate.staticRenderFns
   }
+  // 创建组件实例
   return new vnode.componentOptions.Ctor(options)
 }
 
 function installComponentHooks (data: VNodeData) {
+  // 查找data中是否存在钩子函数
   const hooks = data.hook || (data.hook = {})
+  // hooksToMerge 默认的钩子，系统默认要执行的东西
   for (let i = 0; i < hooksToMerge.length; i++) {
     const key = hooksToMerge[i]
     const existing = hooks[key]

@@ -162,10 +162,15 @@ function callActivatedHooks (queue) {
  * pushed when the queue is being flushed.
  */
 export function queueWatcher (watcher: Watcher) {
+  // 获取id
   const id = watcher.id
+  // 判断是否已经在队列中
   if (has[id] == null) {
+    // 去重，避免重复添加
     has[id] = true
+    // 如果没有在刷新
     if (!flushing) {
+      // 入队
       queue.push(watcher)
     } else {
       // if already flushing, splice the watcher based on its id
@@ -177,6 +182,7 @@ export function queueWatcher (watcher: Watcher) {
       queue.splice(i + 1, 0, watcher)
     }
     // queue the flush
+    // 是否处于等待状态
     if (!waiting) {
       waiting = true
 
@@ -184,6 +190,7 @@ export function queueWatcher (watcher: Watcher) {
         flushSchedulerQueue()
         return
       }
+      // 异步刷新任务队列
       nextTick(flushSchedulerQueue)
     }
   }

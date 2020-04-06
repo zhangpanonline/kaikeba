@@ -1,0 +1,18 @@
+{
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "vue": ["./src/platforms/web/entry-runtime-with-compiler"],
+      "core/*": ["./src/core/*"],
+      "shared/*": ["./src/shared/*"],
+      "web/*": ["./src/platforms/web/*"],
+      "weex/*": ["./src/platforms/weex/*"],
+      "server/*": ["./src/server/*"],
+      "src/*": ["./src/sfc/*"]
+    }
+  }
+}

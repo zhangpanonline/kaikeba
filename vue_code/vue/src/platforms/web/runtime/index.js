@@ -1,5 +1,7 @@
+/**
+ * @file 实现 Vue 的 $mount,安装 web 平台补丁函数
+ */
 /* @flow */
-
 import Vue from 'core/index'
 import config from 'core/config'
 import { extend, noop } from 'shared/util'
@@ -31,11 +33,11 @@ extend(Vue.options.directives, platformDirectives)
 extend(Vue.options.components, platformComponents)
 
 // install platform patch function
-// 安装web平台不定函数(更新函数)：虚拟dom和diff发生的地方
+// 安装web平台补丁函数(更新函数)：虚拟dom和diff发生的地方
 Vue.prototype.__patch__ = inBrowser ? patch : noop
 
 // public mount method
-// 实现$mount
+// 实现$mount,挂载组件，将render函数的 Vnode 转换为 真是 dom
 Vue.prototype.$mount = function (
   el?: string | Element,
   hydrating?: boolean

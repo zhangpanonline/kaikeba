@@ -18,6 +18,10 @@ import {
   defineReactive
 } from '../util/index'
 
+/**
+ * @file 全局 API 入口
+ */
+
 export function initGlobalAPI (Vue: GlobalAPI) {
   // config
   const configDef = {}

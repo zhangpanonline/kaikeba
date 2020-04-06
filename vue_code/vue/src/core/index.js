@@ -2,8 +2,10 @@ import Vue from './instance/index'
 import { initGlobalAPI } from './global-api/index'
 import { isServerRendering } from 'core/util/env'
 import { FunctionalRenderContext } from 'core/vdom/create-functional-component'
+/**
+ * @file 初始化全局API
+ */
 
-// 初始化全局API
 initGlobalAPI(Vue)
 
 Object.defineProperty(Vue.prototype, '$isServer', {

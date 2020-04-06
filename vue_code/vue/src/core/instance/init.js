@@ -12,6 +12,9 @@ import { extend, mergeOptions, formatComponentName } from '../util/index'
 
 let uid = 0
 
+/**
+ * @function Vue 原型链上挂载 _init 方法 
+ */
 export function initMixin (Vue: Class<Component>) {
   Vue.prototype._init = function (options?: Object) {
     const vm: Component = this
@@ -51,12 +54,12 @@ export function initMixin (Vue: Class<Component>) {
     // expose real self
     // 核心初始化过程
     vm._self = vm
-    initLifecycle(vm) // $parent $children $refs $root ...
+    initLifecycle(vm) // 初始化声明周期 $parent $children $refs $root ...
     initEvents(vm) // 事件监听 ...
     initRender(vm) // $slots, $listeners , $createElement ...
     callHook(vm, 'beforeCreate')
     initInjections(vm) // resolve injections before data/props
-    initState(vm)  // 状态初始化：data, props, computed, methods ...
+    initState(vm)  // 状态初始化：data, props, computed, methods, watch ...
     initProvide(vm) // resolve provide after data/props
     callHook(vm, 'created')
 
@@ -68,6 +71,8 @@ export function initMixin (Vue: Class<Component>) {
     }
 
     if (vm.$options.el) {
+      // TODO： web平台里的扩展 $mount 已经挂载过一次，这里再挂载第二次吗？这里的 $mount 从哪里来的？
+      // RESOLVE：web平台只是扩展，还未调用，真正的调用是从这里开始
       vm.$mount(vm.$options.el)
     }
   }

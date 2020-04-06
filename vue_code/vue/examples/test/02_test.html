@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<script src="../../dist/vue.js"></script>
+<body>
+  <div id="app">{{msg}}</div>
+</body>
+</html>
+<script>
+  new Vue({
+    el:'#app',
+    data: {
+      msg: '0'
+    },
+    mounted () {
+      setTimeout(() => {
+        this.msg = 'stime'
+      }, 1000);
+      this.msg = '1'
+      console.log('1:' + this.msg)
+      this.msg = '2'
+      console.log('2: ' + this.msg)
+      console.log('app.innerHTML：' + app.outerHTML)
+      this.$nextTick(() => {
+        console.log('nextTick:' + app.innerHTML)
+      })
+    },
+  })
+
+</script>
