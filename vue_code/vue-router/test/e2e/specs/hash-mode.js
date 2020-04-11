@@ -47,7 +47,7 @@ module.exports = {
       .url('http://localhost:8080/hash-mode/#/%C3%A9/%C3%B1')
       .waitForElementVisible('#app', 1000)
       .assert.containsText('.view', 'unicode: ñ')
-      // TODO: Doesn't seem to work on PhantomJS
+      // todo: Doesn't seem to work on PhantomJS
       // .click('li:nth-child(7)')
       // .assert.urlEquals('http://localhost:8080/hash-mode/#/%C3%A9/%C3%B1?t=%25')
       // .assert.containsText('.view', 'unicode: ñ')
