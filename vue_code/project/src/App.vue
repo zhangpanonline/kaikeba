@@ -2,7 +2,10 @@
   <div id="app">
     <!-- <Form></Form> -->
     <!-- <tree-node></tree-node> -->
-    <router-link to="/">home</router-link>|
+    <router-link to="/">
+      <svg-icon icon-class="twt" ></svg-icon>
+      home
+    </router-link>|
     <router-link to="/about">about</router-link>
     <router-view></router-view>
   </div>
@@ -21,7 +24,7 @@ export default {
     }
   },
   beforeCreate () {
-    console.log(this.$options.parent === vm)
+    // console.log(this.$options.parent === vm)
     // console.log(this)
   },
   created () {
