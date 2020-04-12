@@ -1,6 +1,19 @@
 
 module.exports = {
   mode: 'universal',
+
+  // 自定义router配置
+  router: {
+    extendRoutes(routes, resolve) {
+      routes.push({
+        name: 'foo',
+        path: '/foo',
+        component: resolve(__dirname, 'pages/other')
+      })
+    },
+    // middleware: ['auth']
+  },
+  
   /*
   ** Headers of the page
   */
@@ -23,11 +36,15 @@ module.exports = {
   ** Global CSS
   */
   css: [
+    'element-ui/lib/theme-chalk/index.css'
   ],
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '@/plugins/element-ui',
+    '@/plugins/api-inject',
+    '@/plugins/interceptor'
   ],
   /*
   ** Nuxt.js dev-modules
@@ -41,13 +58,18 @@ module.exports = {
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    'cookie-universal-nuxt' // 兼容客户端、服务端写法
   ],
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
+    proxy: true
+  },
+  proxy: {
+    "/api": "http://localhost:8080"
   },
   /*
   ** Build configuration

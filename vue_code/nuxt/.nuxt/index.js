@@ -4,14 +4,19 @@ import ClientOnly from 'vue-client-only'
 import NoSsr from 'vue-no-ssr'
 import { createRouter } from './router.js'
 import NuxtChild from './components/nuxt-child.js'
-import NuxtError from './components/nuxt-error.vue'
+import NuxtError from '..\\layouts\\error.vue'
 import Nuxt from './components/nuxt.js'
 import App from './App.js'
 import { setContext, getLocation, getRouteData, normalizeError } from './utils'
+import { createStore } from './store.js'
 
 /* Plugins */
 
-import nuxt_plugin_axios_5a79dd1e from 'nuxt_plugin_axios_5a79dd1e' // Source: .\\axios.js (mode: 'all')
+import nuxt_plugin_cookieuniversalnuxt_6efbbb71 from 'nuxt_plugin_cookieuniversalnuxt_6efbbb71' // Source: .\\cookie-universal-nuxt.js (mode: 'all')
+import nuxt_plugin_axios_5446646e from 'nuxt_plugin_axios_5446646e' // Source: .\\axios.js (mode: 'all')
+import nuxt_plugin_elementui_d905880e from 'nuxt_plugin_elementui_d905880e' // Source: ..\\plugins\\element-ui (mode: 'all')
+import nuxt_plugin_apiinject_ffa284d0 from 'nuxt_plugin_apiinject_ffa284d0' // Source: ..\\plugins\\api-inject (mode: 'all')
+import nuxt_plugin_interceptor_257fcfb1 from 'nuxt_plugin_interceptor_257fcfb1' // Source: ..\\plugins\\interceptor (mode: 'all')
 
 // Component: <ClientOnly>
 Vue.component(ClientOnly.name, ClientOnly)
@@ -45,6 +50,14 @@ const defaultTransition = {"name":"page","mode":"out-in","appear":false,"appearC
 async function createApp (ssrContext) {
   const router = await createRouter(ssrContext)
 
+  const store = createStore(ssrContext)
+  // Add this.$router into store actions/mutations
+  store.$router = router
+
+  // Fix SSR caveat https://github.com/nuxt/nuxt.js/issues/3757#issuecomment-414689141
+  const registerModule = store.registerModule
+  store.registerModule = (path, rawModule, options) => registerModule.call(store, path, rawModule, Object.assign({ preserveState: process.client }, options))
+
   // Create Root instance
 
   // here we inject the router and store to all child components,
@@ -52,6 +65,7 @@ async function createApp (ssrContext) {
   const app = {
     head: {"title":"nuxt","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":"My ace Nuxt.js project"}],"link":[{"rel":"icon","type":"image\u002Fx-icon","href":"\u002Ffavicon.ico"}],"style":[],"script":[]},
 
+    store,
     router,
     nuxt: {
       defaultTransition,
@@ -96,6 +110,9 @@ async function createApp (ssrContext) {
     ...App
   }
 
+  // Make app available into store via this.app
+  store.app = app
+
   const next = ssrContext ? ssrContext.next : location => app.router.push(location)
   // Resolve route
   let route
@@ -108,6 +125,7 @@ async function createApp (ssrContext) {
 
   // Set context to app.context
   await setContext(app, {
+    store,
     route,
     next,
     error: app.nuxt.error.bind(app),
@@ -130,6 +148,9 @@ async function createApp (ssrContext) {
     // Add into app
     app[key] = value
 
+    // Add into store
+    store[key] = app[key]
+
     // Check if plugin not already installed
     const installKey = '__nuxt_' + key + '_installed__'
     if (Vue[installKey]) {
@@ -148,10 +169,33 @@ async function createApp (ssrContext) {
     })
   }
 
+  if (process.client) {
+    // Replace store state before plugins execution
+    if (window.__NUXT__ && window.__NUXT__.state) {
+      store.replaceState(window.__NUXT__.state)
+    }
+  }
+
   // Plugin execution
 
-  if (typeof nuxt_plugin_axios_5a79dd1e === 'function') {
-    await nuxt_plugin_axios_5a79dd1e(app.context, inject)
+  if (typeof nuxt_plugin_cookieuniversalnuxt_6efbbb71 === 'function') {
+    await nuxt_plugin_cookieuniversalnuxt_6efbbb71(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_axios_5446646e === 'function') {
+    await nuxt_plugin_axios_5446646e(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_elementui_d905880e === 'function') {
+    await nuxt_plugin_elementui_d905880e(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_apiinject_ffa284d0 === 'function') {
+    await nuxt_plugin_apiinject_ffa284d0(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_interceptor_257fcfb1 === 'function') {
+    await nuxt_plugin_interceptor_257fcfb1(app.context, inject)
   }
 
   // If server-side, wait for async component to be resolved first
@@ -172,6 +216,7 @@ async function createApp (ssrContext) {
   }
 
   return {
+    store,
     app,
     router
   }
