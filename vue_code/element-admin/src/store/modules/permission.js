@@ -22,9 +22,9 @@ export function filterAsyncRoutes(routes, roles) {
   const res = []
 
   routes.forEach(route => {
-    const tmp = { ...route }
-    if (hasPermission(roles, tmp)) {
-      if (tmp.children) {
+    const tmp = { ...route } // 复制一份
+    if (hasPermission(roles, tmp)) { // 如果用户有权限则加入结果路由表
+      if (tmp.children) { // 如果存在子路由则递归过滤之
         tmp.children = filterAsyncRoutes(tmp.children, roles)
       }
       res.push(tmp)
@@ -35,8 +35,8 @@ export function filterAsyncRoutes(routes, roles) {
 }
 
 const state = {
-  routes: [],
-  addRoutes: []
+  routes: [], // 完整路由表
+  addRoutes: [] // 用户可访问路由表 // TODO 这个有什么用？
 }
 
 const mutations = {

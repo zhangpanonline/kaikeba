@@ -158,7 +158,7 @@ export default {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+              this.$router.push({ path: this.redirect || '/', query: this.otherQuery }) // 从哪来回到哪去，没有的话直接到首页
               this.loading = false
             })
             .catch(() => {

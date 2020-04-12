@@ -38,11 +38,11 @@ import nestedRouter from './modules/nested'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
-export const constantRoutes = [
+export const constantRoutes = [ // 通用页面：不需要守卫，可直接访问
   {
     path: '/redirect',
     component: Layout,
-    hidden: true,
+    hidden: true, // 导航菜单忽略该项
     children: [
       {
         path: '/redirect/:path(.*)',
@@ -128,7 +128,7 @@ export const constantRoutes = [
  * asyncRoutes
  * the routes that need to be dynamically loaded based on user roles
  */
-export const asyncRoutes = [
+export const asyncRoutes = [ // 权限页面：受保护页面，要求用户登录并拥有访问权限的角色才能访问
   {
     path: '/permission',
     component: Layout,

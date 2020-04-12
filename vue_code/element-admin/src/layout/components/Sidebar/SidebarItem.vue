@@ -1,17 +1,22 @@
 <template>
   <div v-if="!item.hidden">
+    <!-- 唯一显示子元素的情况显示为链接 -->
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
+          <!-- 抽象出一个item组件处理icon和title -->
           <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
         </el-menu-item>
       </app-link>
     </template>
 
+    <!-- 有子元素显示为菜单 -->
     <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
+      <!-- 标题 -->
       <template slot="title">
         <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
       </template>
+      <!-- 递归组件 -->
       <sidebar-item
         v-for="child in item.children"
         :key="child.path"
