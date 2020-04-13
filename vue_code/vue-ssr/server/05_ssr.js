@@ -35,7 +35,7 @@ function createRenderer () {
 // 监控src目录，自动构建
 // 如果当前执行环境是开发环境，则监控src目录的变更
 if (isDev) {
-  // 获取一个当前js线程的子进程，因为js是单线程，不可能再获取一个新的线程，所以用当前线程的子进程，并且两者是可以通信的，能知道这个子进程的结果
+  // child_process模块用于新建子进程。子进程的运行结果储存在系统缓存之中（最大200KB），等到子进程运行结束以后，主进程再用回调函数读取子进程的运行结果
   const cp = require('child_process')
   // 创建一个bs实例用于将来浏览器同步操作
   const bs = require('browser-sync').create()
