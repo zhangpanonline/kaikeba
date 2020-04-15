@@ -7,20 +7,24 @@
 </head>
 <script src="../../dist/vue.js"></script>
 <body>
-  <div id="app">{{msg}}</div>
+  <div id="app">
+    111
+    <p>{{msg.foo}}</p>
+    <p id="dom">222</p>
+  </div>
 </body>
 </html>
 <script>
-  const vm = new Vue({
+  new Vue({
     el:'#app',
     data: {
-      msg: 'mmm'
+      msg: null
+    },
+    created () {
+      console.log(dom)
     },
     mounted () {
-      setTimeout(() => {
-        this.msg = 'msg'
-      }, 1000);
+      console.log(dom)
     },
   })
-  console.log(vm.$options.render)
 </script>

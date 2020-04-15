@@ -9,7 +9,7 @@ export default function FnComponent(props) {
     const timer = setInterval(() => {
       setDate(new Date())
     }, 1000)
-    console.log(timer)
+    // console.log(timer)
     return () => clearInterval(timer) // 组件卸载执行
   }, [])
 
