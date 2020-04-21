@@ -1,0 +1,1 @@
+1. `jest hello.js --watch`
