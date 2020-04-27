@@ -5,4 +5,5 @@ exports.__esModule = true;
 // import './get_min_stack'
 // import './del_ring'
 // import './fibonacci'
-require("./print_yanghui");
+// import './print_yanghui'
+require("./lib/linked_list");

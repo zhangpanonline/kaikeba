@@ -3,4 +3,5 @@
 // import './get_min_stack'
 // import './del_ring'
 // import './fibonacci'
-import './print_yanghui'
+// import './print_yanghui'
+import './lib/linked_list'
