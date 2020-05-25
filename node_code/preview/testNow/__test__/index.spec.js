@@ -11,7 +11,7 @@ const fs = require('fs')
 // test('测试测试代码生成', () => {
 //   const src = new (require('../index'))()
 //   const ret = src.getTestSource('fun', 'class.js')
-//   console.log(ret)
+//   console.log('ret', ret)
 //   expect(ret)
 //     .toBe(`
 // test('TEST fun', () => {
