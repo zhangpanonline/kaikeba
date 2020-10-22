@@ -7,11 +7,12 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "启动程序",
+            "name": "测试命令行脚本",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\preview\\asynchronous\\index.js"
+            "program": "${workspaceFolder}\\imooc\\node_inspector\\cmd.js",
+            "args": ["init"]
         }
     ]
 }
