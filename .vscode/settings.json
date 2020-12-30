@@ -1,0 +1,23 @@
+{
+  "deploy": {
+      "packages": [{
+          "files": [
+              "**/*",
+          ],
+
+          "exclude": [
+              "**/node_modules/**",
+          ],
+          "deployOnSave": false
+      }],
+      "targets": [{
+          "type": "sftp",
+          "name": "kaikeba",
+          "dir": "/root/kaikeba", // 远程服务器目标地址
+          "host": "104.168.204.234", // 远程服务器域名
+          "port": 22,
+          "user": "root", // 使用哪个用户登录远程服务器
+          "privateKey": "/Users/zp/.ssh/id_rsa" // 本机私钥地址
+      }],
+  },
+}
