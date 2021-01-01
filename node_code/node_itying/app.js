@@ -79,7 +79,7 @@ const fs = require("fs");
 }
 
 { 
-  // 08
+  // 09
   /**
  * 以流的方式读取文件
  */
@@ -122,4 +122,13 @@ const fs = require("fs");
   // writeStream.on('error', err => {
   //   console.error(err)
   // })
+  /**
+ * 管道流
+ */
+
+//  const readStream = fs.createReadStream('./assets/img1/a.png')
+
+//  const writeStream = fs.createWriteStream('./assets/img2/b.png')
+
+//  readStream.pipe(writeStream)
 }
